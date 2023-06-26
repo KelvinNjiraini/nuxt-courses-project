@@ -1,12 +1,10 @@
 <template>
-    <div
-        class="flex flex-col items-center w-full h-full min-h-screen p-12 bg-gray-100"
-    >
+    <div>
         <div class="mb-12 prose">
             <h1>
                 <span class="font-medium">
                     Course:
-                    <span class="font-bold">Mastering Nuxt 3</span>
+                    <span class="font-bold">{{ title }}</span>
                 </span>
             </h1>
         </div>
@@ -16,7 +14,6 @@
                 class="prose mr-4 p-8 bg-white rounded-md min-w-[20ch] max-w-[30ch] flex flex-col"
             >
                 <h3>Chapters</h3>
-                <!-- List of chapters here -->
                 <div
                     class="space-y-1 mb-4 flex flex-col"
                     v-for="chapter in chapters"
@@ -40,11 +37,32 @@
             </div>
 
             <div class="prose p-12 bg-white rounded-md w-[65ch]">
-                <NuxtPage />
+                <NuxtErrorBoundary>
+                    <NuxtPage />
+                    <template #error="{ error }">
+                        <p>
+                            Oh no, something went wrong with the lesson!
+                            <code>{{ error }}</code>
+                        </p>
+                        <button
+                            class="rounded-md bg-gray-500 px-3 py-2 font-bold text-white hover:cursor-pointer"
+                            @click="resetError(error)"
+                        >
+                            Reset
+                        </button>
+                    </template>
+                </NuxtErrorBoundary>
             </div>
         </div>
     </div>
 </template>
+
 <script setup>
-const { chapters } = useCourse();
+const { chapters, title } = useCourse();
+const resetError = async (error) => {
+    await navigateTo(
+        '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'
+    );
+    error.value = null;
+};
 </script>

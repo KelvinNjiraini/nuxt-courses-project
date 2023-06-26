@@ -34,6 +34,48 @@
 const course = useCourse();
 const route = useRoute();
 
+<<<<<<< HEAD
+=======
+definePageMeta({
+    middleware: [
+        function ({ params }, from) {
+            const course = useCourse();
+
+            const chapter = computed(() =>
+                course.chapters.find(
+                    (chapter) => chapter.slug === params.chapterSlug
+                )
+            );
+
+            if (!chapter.value) {
+                return abortNavigation(
+                    createError({
+                        statusCode: 404,
+                        message: 'Chapter not found',
+                    })
+                );
+            }
+
+            const lesson = computed(() =>
+                chapter?.value?.lessons.find(
+                    (lesson) => lesson.slug === params.lessonSlug
+                )
+            );
+
+            if (!lesson.value) {
+                return abortNavigation(
+                    createError({
+                        statusCode: 404,
+                        message: 'Lesson not found',
+                    })
+                );
+            }
+        },
+        'auth',
+    ],
+});
+
+>>>>>>> cf0f71ab9f4ed1ad50bba6fa9acba78ebc349a7d
 const chapter = computed(() => {
     return course.chapters.find(
         (chapter) => chapter.slug === route.params.chapterSlug
