@@ -43,7 +43,7 @@ definePageMeta({
             const course = await useCourse();
 
             const chapter = computed(() =>
-                course.value?.chapters.find(
+                course?.value?.chapters.find(
                     (chapter) => chapter.slug === params.chapterSlug
                 )
             );
@@ -77,7 +77,7 @@ definePageMeta({
 });
 
 const chapter = computed(() => {
-    return course.value?.chapters.find(
+    return course?.value?.chapters?.find(
         (chapter) => chapter.slug === route.params.chapterSlug
     );
 });
@@ -89,7 +89,7 @@ const chapter = computed(() => {
 // });
 
 const title = computed(() => {
-    return `${lesson?.value?.title} - ${course.value.title}`;
+    return `${lesson?.value?.title} - ${course?.value?.title}`;
 });
 
 useHead({
