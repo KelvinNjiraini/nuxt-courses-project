@@ -3,7 +3,7 @@ import { CourseProgress } from '~/types/course';
 
 export const useCourseProgress = defineStore('courseProgress', () => {
     // Initialize progress from localstorage
-    // const progress = useLocalStorage('progress', {});
+
     const progress = ref<CourseProgress>({});
     const initialized = ref(false);
 
@@ -37,6 +37,28 @@ export const useCourseProgress = defineStore('courseProgress', () => {
             ...progress.value[chapter],
             [lesson]: !currentProgress,
         };
+
+        // TODO: Update in DB (Lesson 6-4)
+        try {
+            await $fetch(
+                `/api/course/chapter/${chapter}/lesson/${lesson}/progress`,
+                {
+                    method: 'POST',
+                    body: {
+                        completed: !currentProgress,
+                        // userEmail: user.value.email,
+                    },
+                }
+            );
+        } catch (error) {
+            console.log(error);
+
+            // If the request failed, revert the progress value
+            progress.value[chapter] = {
+                ...progress.value[chapter],
+                [lesson]: currentProgress,
+            };
+        }
     }
 
     return {
